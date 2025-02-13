@@ -285,11 +285,11 @@ Response:
 4. **Resolution:** Alerts are automatically resolved when metrics return to normal
 5. **Logging:** All events are stored for historical analysis
 
-![System Health Monitoring Tool Architecure](monitoring-architecture.html)
+![System Health Monitoring Tool Architecure](https://github.com/Harsh-Kesharwani/system-health-monitor/monitoring-architecture.html)
 
 ## 📊 Database Schema
 
-![Database Schema](database-architecture.html)
+![Database Schema](https://github.com/Harsh-Kesharwani/system-health-monitor/database-architecture.html)
 
 - **metrics:** Stores time-series data of system performance
 - **metadata:** Contains system identification information
