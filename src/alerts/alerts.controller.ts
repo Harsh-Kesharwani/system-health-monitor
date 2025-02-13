@@ -37,8 +37,10 @@ export class AlertsController {
   @Get('thresholds')
   @ApiOperation({ summary: 'Get all alert thresholds' })
   @ApiResponse({ status: 200, description: 'Return all alert thresholds' })
-  getThresholds() {
-    return this.alertsService.getThresholds();
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async getThresholds() {
+    const thresholds = Object.fromEntries(this.alertsService.getThresholds());
+    return { thresholds };
   }
 
   @Get(':id')

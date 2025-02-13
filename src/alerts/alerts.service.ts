@@ -5,12 +5,17 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { Alert, AlertType, AlertStatus } from './entities/alert.entity';
 import { MetricsService } from '../metrics/metrics.service';
 import { CreateAlertThresholdDto } from './dto/create-alert.dto';
+import * as axios from 'axios';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Injectable()
 export class AlertsService {
   private readonly logger = new Logger(AlertsService.name);
   private thresholds: Map<AlertType, { threshold: number; message: string }> =
     new Map();
+  private slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 
   constructor(
     @InjectRepository(Alert)
@@ -36,11 +41,9 @@ export class AlertsService {
     const query = this.alertRepository
       .createQueryBuilder('alert')
       .orderBy('alert.createdAt', 'DESC');
-
     if (status) {
       query.where('alert.status = :status', { status });
     }
-
     return query.getMany();
   }
 
@@ -63,9 +66,11 @@ export class AlertsService {
     this.logger.log(`Set ${type} threshold to ${threshold}%`);
   }
 
+
   getThresholds(): Map<AlertType, { threshold: number; message: string }> {
     return new Map(this.thresholds);
   }
+
 
   getDefaultMessage(type: AlertType): string {
     switch (type) {
@@ -81,11 +86,9 @@ export class AlertsService {
   @Cron(CronExpression.EVERY_MINUTE)
   async checkThresholds() {
     const metrics = await this.metricsService.getLatestMetrics();
-
     this.checkMetric(AlertType.CPU, metrics.cpuUsage);
     this.checkMetric(AlertType.MEMORY, metrics.memoryUsage);
     this.checkMetric(AlertType.DISK, metrics.diskUsage);
-
     await this.resolveFixedAlerts(metrics);
   }
 
@@ -147,11 +150,21 @@ export class AlertsService {
     }
   }
 
-  private sendNotification(alert: Alert) {
-    // For now, just log to console
-    // In a real system, this could send emails, webhooks, etc.
-    this.logger.warn(
-      `[ALERT] ${alert.message}: ${alert.type} is at ${alert.value.toFixed(1)}% (threshold: ${alert.threshold}%)`,
-    );
+  private async sendNotification(alert: Alert) {
+    const message = `[ALERT] ${alert.message}: ${alert.type} is at ${alert.value.toFixed(1)}% (threshold: ${alert.threshold}%)`;
+    this.logger.warn(message);
+
+    if (this.slackWebhookUrl) {
+      try {
+        await axios.default.post(this.slackWebhookUrl, { text: message });
+        this.logger.log('Slack notification sent successfully');
+      } catch (error) {
+        this.logger.error('Failed to send Slack notification', error);
+      }
+    } else {
+      this.logger.warn(
+        'SLACK_WEBHOOK_URL is not set in the environment variables',
+      );
+    }
   }
 }
