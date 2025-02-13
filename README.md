@@ -13,6 +13,11 @@ A comprehensive local system health monitoring solution that provides real-time 
 - **Historical Data:** Store and retrieve past performance metrics
 - **Secure Access:** JWT-based authentication for all endpoints
 - **API Documentation:** Interactive Swagger UI for testing and integration
+- **Slack Integration:** Receive real-time alerts through Slack webhooks
+
+## 🌐 Live Demo
+
+Access the live API documentation: [https://system-health-monitor-2v3x.onrender.com/api/docs](https://system-health-monitor-2v3x.onrender.com/api/docs)
 
 ## 🛠️ Tech Stack
 
@@ -22,6 +27,7 @@ A comprehensive local system health monitoring solution that provides real-time 
 - **Authentication:** Passport.js with JWT
 - **API Docs:** Swagger/OpenAPI
 - **Scheduling:** NestJS Task Scheduling
+- **Notifications:** Slack integration
 
 ## 📋 Prerequisites
 
@@ -62,7 +68,7 @@ CREATE DATABASE system_monitor;
 
 ### 4. Environment Configuration
 
-Create a `.env` file in the project root with the following variables:
+Rename `.env.example` to `.env` and update the values based on your requirements:
 
 ```env
 # Database Configuration
@@ -79,6 +85,9 @@ JWT_SECRET=your_strong_secret_key_here_change_in_production
 # Server Configuration
 PORT=3000
 NODE_ENV=development
+
+# Slack Webhook (Optional)
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/your/webhook/url
 ```
 
 ### 5. Start the Application
@@ -328,12 +337,13 @@ Historical metrics are kept for 30 days by default. This can be configured in th
 
 ### Deploy to Render
 
-1. Create a new Web Service on Render
-2. Link to your repository
-3. Set the build command: `npm install && npm run build`
-4. Set the start command: `npm run start:prod`
-5. Add the environment variables
-6. Click 'Create Web Service'
+1. Create a new PostgreSQL database in Render
+2. Create a new Web Service on Render
+3. Link to your repository
+4. Set the build command: `npm install && npm run build`
+5. Set the start command: `npm run start:prod`
+6. Add all required environment variables, including the Render PostgreSQL connection URL
+7. Click 'Create Web Service'
 
 ## 📚 Advanced Usage
 
