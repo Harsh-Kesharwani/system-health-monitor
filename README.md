@@ -17,7 +17,7 @@ A comprehensive local system health monitoring solution that provides real-time 
 
 ## 🌐 Live Demo
 
-Access the live API documentation: [https://system-health-monitor-2v3x.onrender.com/api/docs](https://system-health-monitor-2v3x.onrender.com/api/docs)
+### Access the live API documentation: [https://system-health-monitor-2v3x.onrender.com/api/docs](https://system-health-monitor-2v3x.onrender.com/api/docs)
 
 ## 🛠️ Tech Stack
 
@@ -116,6 +116,8 @@ yarn start:prod
 - **API Documentation:** http://localhost:3000/api/docs
 
 ### 2. First Steps
+
+visit: http://localhost:3000/api/docs
 
 1. Register an admin user
 2. Login to get your JWT token
@@ -327,13 +329,6 @@ curl -X POST http://localhost:3000/api/alerts/thresholds \
 Historical metrics are kept for 30 days by default. This can be configured in the application settings.
 
 ## 🌐 Deployment
-
-### Deploy to Railway
-
-1. Create a new project on Railway
-2. Connect your GitHub repository
-3. Add the environment variables
-4. Deploy the application
 
 ### Deploy to Render
 
